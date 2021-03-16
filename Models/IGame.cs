@@ -18,7 +18,7 @@ namespace ReversiRestApi.Models
         Colour[,] Board { get; set; }
         Colour IsTurn { get; set; }
         bool Pass();
-        bool Finished();
+        bool GameFinished();
 
         //welke kleur het meest voorkomend op het speelbord
         Colour WinningColour();
