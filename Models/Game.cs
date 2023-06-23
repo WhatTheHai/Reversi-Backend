@@ -57,29 +57,18 @@ namespace ReversiRestApi.Models
             return false;
         }
 
-        public Colour WinningColour() {
-            int white;
-            var black = white = 0;
-            for (int i = 0; i < GetBoardSize; i++) {
-                for (int j = 0; j < GetBoardSize; j++) {
-                    switch (Board[i, j]) {
-                        case Colour.None:
-                            break;
-                        case Colour.Black:
-                            black++;
-                            break;
-                        case Colour.White:
-                            white++;
-                            break;
-                    }
-                }
-            }
+        public Colour WinningColour()
+        {
+            int blackCount = Board.Cast<Colour>().Count(cell => cell == Colour.Black);
+            int whiteCount = Board.Cast<Colour>().Count(cell => cell == Colour.White);
 
-            if (black > white)
+            if (blackCount > whiteCount)
                 return Colour.Black;
-            return white > black ? Colour.White : Colour.None;
-
+            if (whiteCount > blackCount)
+                return Colour.White;
+            return Colour.None;
         }
+
 
 
         public bool PossibleMove(int rowMove, int columnMove) {
@@ -115,7 +104,7 @@ namespace ReversiRestApi.Models
         }
 
         public bool InBounds(int rowMove, int columnMove) {
-            return rowMove >= 0 && rowMove <= 7 && columnMove >= 0 && columnMove <= 7;
+            return rowMove >= 0 && rowMove <= GetBoardSize - 1 && columnMove >= 0 && columnMove <= GetBoardSize - 1;
         }
 
         public bool DoMove(int rowMove, int columnMove) {
