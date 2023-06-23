@@ -51,8 +51,8 @@ namespace ReversiRestApi.Controllers {
         }
 
         [HttpPut("surrender")]
-        public ActionResult<bool> Surrender([FromBody] ApiSurrender surrenderGame) {
-            var game = iRepository.GetGames().First(g => g.Token == surrenderGame.GameToken);
+        public ActionResult<bool> Surrender([FromBody] ApiPlayerGameData surrenderGame) {
+            var game = iRepository.GetGame(surrenderGame.GameToken);
 
             if (game == null) {
                 return NotFound();
@@ -74,6 +74,22 @@ namespace ReversiRestApi.Controllers {
             }
 
             return game.DoMove(move.Y, move.X);
-        } 
+        }
+
+        [HttpPut("joingame")]
+        public ActionResult<bool> JoinGame([FromBody] ApiPlayerGameData joinGame) {
+            var game = iRepository.GetGame(joinGame.GameToken);
+
+            if (game == null) {
+                return NotFound();
+            }
+
+            if (game.Player2Token == null) {
+                game.Player2Token = joinGame.PlayerToken;
+                return true;
+            }
+
+            return false;
+        }
     }
 }
