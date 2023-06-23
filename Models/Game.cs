@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using System.Xml;
+using ReversiRestApi.Interfaces;
 
 namespace ReversiRestApi.Models
 {

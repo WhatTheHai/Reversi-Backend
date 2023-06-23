@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ReversiRestApi.Models;
 
-namespace ReversiRestApi.Models {
-    public interface IGameRepository {
+namespace ReversiRestApi.Interfaces
+{
+    public interface IGameRepository
+    {
         void AddGame(Game game);
 
         public List<Game> GetGames();

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReversiRestApi.Interfaces;
 using ReversiRestApi.Models;
 using ReversiRestApi.Models.Apis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ReversiRestApi.Controllers {
+namespace ReversiRestApi.Controllers
+{
     [Route("api/game")]
     [ApiController]
     public class GameController : ControllerBase {
@@ -23,12 +25,13 @@ namespace ReversiRestApi.Controllers {
 
         // POST api/game
         [HttpPost]
-        public void AddNewGame([FromBody] ApiGame game) {
+        public ActionResult AddNewGame([FromBody] ApiGame game) {
             iRepository.AddGame(new Game() {
                 Description = game.Description,
                 Player1Token = game.Player1Token,
-                Token = (new Guid()).ToString()
+                Token = (Guid.NewGuid().ToString())
             });
+            return Ok();
         }
 
         // GET api/game/{token}
@@ -63,7 +66,7 @@ namespace ReversiRestApi.Controllers {
 
         [HttpPut("move")]
         public ActionResult<bool> DoMove([FromBody] ApiPlayerMove move) {
-            var game = iRepository.GetGames().First(g => g.Token == move.GameToken);
+            var game = iRepository.GetGames().FirstOrDefault(g => g.Token == move.GameToken);
 
             if (game == null) {
                 return NotFound();

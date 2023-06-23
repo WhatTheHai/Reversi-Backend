@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ReversiRestApi.Interfaces;
 
-namespace ReversiRestApi.Models {
+namespace ReversiRestApi.Models
+{
     public class GameRepository : IGameRepository {
         //List of temporary games
         public List<Game> Games { get; set; }

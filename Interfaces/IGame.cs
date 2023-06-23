@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReversiRestApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ReversiRestApi.Models
+namespace ReversiRestApi.Interfaces
 {
     public interface IGame
     {
