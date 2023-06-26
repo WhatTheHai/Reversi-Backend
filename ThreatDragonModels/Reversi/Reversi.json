@@ -468,6 +468,9 @@
               "height": 60
             },
             "attrs": {
+              "text": {
+                "text": "Reversi DB"
+              },
               "topLine": {
                 "strokeWidth": 1,
                 "strokeDasharray": null
@@ -483,7 +486,7 @@
             "zIndex": 11,
             "data": {
               "type": "tm.Store",
-              "name": "Store",
+              "name": "Reversi DB",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
