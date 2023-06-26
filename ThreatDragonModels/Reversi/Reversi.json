@@ -391,98 +391,6 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "Data Flow",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "protocol": "",
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "hasOpenThreats": false,
-              "threats": []
-            },
-            "id": "602a11c8-3f21-480f-a43f-27a38408a0ac",
-            "source": {
-              "cell": "c21d3ee7-fedb-4b61-8eee-02e12d95d9ac"
-            },
-            "target": {
-              "cell": "649b5b0d-c3a1-42c7-bf39-b4763ae3b9e7"
-            },
-            "vertices": [
-              {
-                "x": 400,
-                "y": 350
-              },
-              {
-                "x": 440,
-                "y": 380
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "strokeWidth": 1,
-                "targetMarker": {
-                  "name": "classic"
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Data Flow",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "protocol": "",
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "hasOpenThreats": false,
-              "threats": []
-            },
-            "id": "3e0b6e74-d6f4-401b-acd6-48b020e0e561",
-            "source": {
-              "cell": "649b5b0d-c3a1-42c7-bf39-b4763ae3b9e7"
-            },
-            "target": {
-              "cell": "c21d3ee7-fedb-4b61-8eee-02e12d95d9ac"
-            },
-            "vertices": [
-              {
-                "x": 530,
-                "y": 370
-              },
-              {
-                "x": 450,
-                "y": 300
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "strokeWidth": 1,
-                "targetMarker": {
-                  "name": "classic"
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
               "name": "Query Response",
               "description": "",
               "outOfScope": false,
@@ -528,7 +436,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "(Game related) Queries",
+              "name": "(Game related) \nQueries",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
@@ -560,7 +468,105 @@
               }
             ],
             "labels": [
-              "(Game related) Queries"
+              "(Game related) \nQueries"
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "strokeWidth": 1,
+                "targetMarker": {
+                  "name": "classic"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "(Account related)\nQueries",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "protocol": "",
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "hasOpenThreats": false,
+              "threats": []
+            },
+            "id": "602a11c8-3f21-480f-a43f-27a38408a0ac",
+            "source": {
+              "cell": "c21d3ee7-fedb-4b61-8eee-02e12d95d9ac"
+            },
+            "target": {
+              "cell": "649b5b0d-c3a1-42c7-bf39-b4763ae3b9e7"
+            },
+            "vertices": [
+              {
+                "x": 390,
+                "y": 330
+              },
+              {
+                "x": 440,
+                "y": 380
+              }
+            ],
+            "labels": [
+              "(Account related)\nQueries"
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "strokeWidth": 1,
+                "targetMarker": {
+                  "name": "classic"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Query Response",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "protocol": "",
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "hasOpenThreats": false,
+              "threats": []
+            },
+            "id": "3e0b6e74-d6f4-401b-acd6-48b020e0e561",
+            "source": {
+              "cell": "649b5b0d-c3a1-42c7-bf39-b4763ae3b9e7"
+            },
+            "target": {
+              "cell": "c21d3ee7-fedb-4b61-8eee-02e12d95d9ac"
+            },
+            "vertices": [
+              {
+                "x": 530,
+                "y": 370
+              },
+              {
+                "x": 450,
+                "y": 300
+              }
+            ],
+            "labels": [
+              "Query Response"
             ]
           },
           {
