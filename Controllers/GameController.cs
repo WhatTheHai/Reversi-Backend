@@ -31,6 +31,7 @@ namespace ReversiRestApi.Controllers
                 Player1Token = game.Player1Token,
                 Token = (Guid.NewGuid().ToString())
             });
+
             return Ok();
         }
 
@@ -52,6 +53,7 @@ namespace ReversiRestApi.Controllers
             if (game == null) {
                 return NotFound();
             }
+
             return ApiGame.ConvertGameToApiGameData(game).IsTurn;
         }
         
@@ -64,7 +66,14 @@ namespace ReversiRestApi.Controllers
                 return NotFound();
             }
 
-            return game.Surrender(surrenderGame.PlayerToken);
+            var surrender = game.Surrender(surrenderGame.PlayerToken);
+
+            if (surrender == false) {
+                return BadRequest("You are not allowed to surrender!");
+            }
+
+            iRepository.Save();
+            return Ok();
         }
 
         // PUT api/game/move
@@ -76,11 +85,17 @@ namespace ReversiRestApi.Controllers
                 return NotFound();
             }
 
-            if (game.IsTurn != game.GetPlayerColour(move.PlayerToken)) {
-                return Unauthorized();
+            if (game.IsTurn != game.GetPlayerColour(move.PlayerToken) || move.PlayerToken == null) {
+                return Unauthorized("This is not your turn");
             }
 
-            return game.DoMove(move.Y, move.X);
+            var doMove = game.DoMove(move.Y, move.X);
+
+            if (doMove == false) {
+                return BadRequest("Not a valid move!");
+            }
+            iRepository.Save();
+            return true;
         }
 
         // PUT api/game/joingame
@@ -94,8 +109,10 @@ namespace ReversiRestApi.Controllers
 
             if (game.Player2Token == null) {
                 game.Player2Token = joinGame.PlayerToken;
+                iRepository.Save();
                 return true;
             }
+
 
             return false;
         }

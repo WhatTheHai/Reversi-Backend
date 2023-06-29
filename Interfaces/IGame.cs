@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReversiRestApi.Models;
+using ReversiRestApi.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

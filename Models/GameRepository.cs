@@ -41,5 +41,7 @@ namespace ReversiRestApi.Models
         public Game GetGame(string gameToken) {
             return Games.FirstOrDefault(game => game.Token == gameToken);
         }
+
+        public void Save() { }
     }
 }

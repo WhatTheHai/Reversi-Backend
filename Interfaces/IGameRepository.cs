@@ -13,5 +13,7 @@ namespace ReversiRestApi.Interfaces
         public List<Game> GetGames();
 
         Game GetGame(string gameToken);
+
+        void Save();
     }
 }

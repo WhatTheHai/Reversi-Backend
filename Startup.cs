@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ReversiRestApi.DAL;
 using ReversiRestApi.Models;
 using ReversiRestApi.Interfaces;
 
@@ -30,7 +32,10 @@ namespace ReversiRestApi
             services.AddControllers();
             services.AddMvc();
 
-            services.AddSingleton<IGameRepository, GameRepository>();
+            services.AddSingleton<IGameRepository, GameAccessLayer>();
+            services.AddDbContext<ReversiDbContext>(
+                options => options.UseSqlite("Data source=ReversiDbRestApi.db;"), ServiceLifetime.Singleton
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

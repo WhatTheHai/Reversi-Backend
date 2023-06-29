@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
+using Newtonsoft.Json;
 using ReversiRestApi.Interfaces;
+using ReversiRestApi.Models.Enums;
 
 namespace ReversiRestApi.Models
 {
@@ -14,13 +18,26 @@ namespace ReversiRestApi.Models
         public string Token { get; set; }
         public string Player1Token { get; set; }
         public string Player2Token { get; set; }
+        [NotMapped]
         public Colour[,] Board { get; set; }
+
+        [Column("Board")]
+        public string BoardString {
+            get => ConvertBoardToString(Board);
+            set => Board = ConvertStringToBoard(value);
+        }
         public Colour IsTurn { get; set; }
         private const int BoardSize = 8;
+        [NotMapped]
         public bool Finished { get; private set; }
+        [NotMapped]
         public string Winner { get; private set; }
+        [NotMapped]
         public string Loser { get; private set; }
         public int GetBoardSize => BoardSize;
+        [NotMapped]
+        public GameStatus GameStatus => Player2Token == null ? GameStatus.Awaiting : (GameFinished() ? GameStatus.Finished : GameStatus.Busy);
+
 
         public Game() {
             Board = new Colour[GetBoardSize, GetBoardSize];
@@ -240,6 +257,27 @@ namespace ReversiRestApi.Models
                     Loser = Player1Token;
                     break;
             }
+        }
+
+        private string ConvertBoardToString(Colour[,] board) {
+            var oneDimensionBoard = board.Cast<Colour>().ToArray();
+            return JsonConvert.SerializeObject(oneDimensionBoard);
+        }
+
+        private Colour[,] ConvertStringToBoard(string boardString) {
+            Colour[] oneDimensionBoard = JsonConvert.DeserializeObject<Colour[]>(boardString);
+
+            // 1d -> 2d
+            int size = (int)Math.Sqrt(oneDimensionBoard.Length);
+            Colour[,] board = new Colour[size, size];
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    // i * size to go one more "down"
+                    board[i, j] = oneDimensionBoard[i * size + j];
+                }
+            }
+
+            return board;
         }
     }
 }
