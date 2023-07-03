@@ -19,8 +19,13 @@ namespace ReversiRestApi.Controllers
 
         // GET api/game
         [HttpGet]
-        public ActionResult<IEnumerable<string>> GetGameDescAwaitingPlayers() {
-            return iRepository.GetGames().Where(game => game.Player2Token == null).Select(game => game.Description).ToList();
+        public ActionResult<List<ApiAwaitingGame>> GetGameDescAwaitingPlayers() {
+            List<ApiAwaitingGame> awaitingGames = iRepository.GetGames()
+                .Where(game => game.Player2Token == null)
+                .Select(game => ApiAwaitingGame.ConvertGameToApiAwaitingGame(game))
+                .ToList();
+
+            return awaitingGames;
         }
 
         // POST api/game
