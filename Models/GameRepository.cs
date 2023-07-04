@@ -34,6 +34,10 @@ namespace ReversiRestApi.Models
             Games.Add(game);
         }
 
+        public void RemoveGame(Game game) {
+            Games.Remove(game);
+        }
+
         public List<Game> GetGames() {
             return Games;
         }

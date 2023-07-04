@@ -10,6 +10,8 @@ namespace ReversiRestApi.Interfaces
     {
         void AddGame(Game game);
 
+        void RemoveGame(Game game);
+
         public List<Game> GetGames();
 
         Game GetGame(string gameToken);

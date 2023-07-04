@@ -28,6 +28,16 @@ namespace ReversiRestApi.Controllers
             return awaitingGames;
         }
 
+        // GET api/game/{token}/anygames
+        [HttpGet("{token}/anygames")]
+        public ActionResult<List<ApiGame>> GetGamePlayerToken(string token) {
+            List<ApiGame> awaitingGames = iRepository.GetGames()
+                .Where(game => game.Player1Token == token || game.Player2Token == token)
+                .Select(game => ApiGame.ConvertGameToApiGameData(game))
+                .ToList();
+            return awaitingGames.Any() ? awaitingGames : null;
+        }
+
         // POST api/game
         [HttpPost]
         public ActionResult AddNewGame([FromBody] ApiGame game) {
@@ -117,11 +127,30 @@ namespace ReversiRestApi.Controllers
                 iRepository.Save();
                 return true;
             }
-
-
             return false;
         }
 
+        // DELETE api/game/{token}
+        [HttpDelete("{token}")]
+        public ActionResult RemoveGame([FromBody] ApiPlayerGameData removeGame)
+        {
+            var game = iRepository.GetGame(removeGame.GameToken);
 
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the player1token matches the player1token of the game
+            if (game.Player1Token != removeGame.PlayerToken)
+            {
+                return Unauthorized("You are not the host of the game, you can't delete.");
+            }
+
+            iRepository.RemoveGame(game);
+            iRepository.Save();
+
+            return Ok();
+        }
     }
 }

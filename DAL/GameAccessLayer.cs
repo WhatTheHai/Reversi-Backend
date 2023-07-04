@@ -26,6 +26,11 @@ namespace ReversiRestApi.DAL
             return _context.Games.FirstOrDefault(g => g.Token == gameToken);
         }
 
+        public void RemoveGame(Game game) {
+            _context.Games.Remove(game);
+            _context.SaveChanges();
+        }
+
         public void Save() {
             _context.SaveChanges();
         }
