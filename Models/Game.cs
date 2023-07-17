@@ -28,15 +28,14 @@ namespace ReversiRestApi.Models
         }
         public Colour IsTurn { get; set; }
         private const int BoardSize = 8;
-        [NotMapped]
-        public bool Finished { get; private set; }
-        [NotMapped]
-        public string Winner { get; private set; }
-        [NotMapped]
-        public string Loser { get; private set; }
+        [NotMapped] public bool Finished { get; private set; }
+        [NotMapped] public string Winner { get; private set; }
+        [NotMapped] public string Loser { get; private set; }
         public int GetBoardSize => BoardSize;
         [NotMapped]
         public GameStatus GameStatus => Player2Token == null ? GameStatus.Awaiting : (GameFinished() ? GameStatus.Finished : GameStatus.Busy);
+
+        //public bool UpdatedScores { get; set; } = false;
 
 
         public Game() {
@@ -255,6 +254,10 @@ namespace ReversiRestApi.Models
                 case Colour.White:
                     Winner = Player2Token;
                     Loser = Player1Token;
+                    break;
+                case Colour.None:
+                    Winner = "Draw";
+                    Loser = "Draw";
                     break;
             }
         }

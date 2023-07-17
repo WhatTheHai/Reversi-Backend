@@ -60,6 +60,16 @@ namespace ReversiRestApi.Controllers
             return ApiGame.ConvertGameToApiGameData(game);
         }
 
+        // GET api/game/{token}/status
+        [HttpGet("{token}/status")]
+        public ActionResult<ApiGameStatus> GetGameStatusWithToken(string token) {
+            var game = iRepository.GetGame(token);
+            if (game == null) {
+                return NotFound();
+            }
+            return ApiGameStatus.ConvertGameToApiGameStatus(game);
+        }
+
 
         // GET api/game/{token}/turn
         [HttpGet("{token}/turn")]
