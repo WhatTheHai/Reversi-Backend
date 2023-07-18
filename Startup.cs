@@ -29,6 +29,14 @@ namespace ReversiRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("Reversi", builder =>
+            {
+                builder.WithOrigins("https://localhost:5001")
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
             services.AddControllers();
             services.AddMvc();
 
@@ -49,6 +57,8 @@ namespace ReversiRestApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("Reversi");
 
             app.UseAuthorization();
 

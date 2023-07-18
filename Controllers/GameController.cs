@@ -110,8 +110,13 @@ namespace ReversiRestApi.Controllers
                 return NotFound();
             }
 
-            if (game.IsTurn != game.GetPlayerColour(move.PlayerToken) || move.PlayerToken == null) {
+            var test = game.GetPlayerColour(move.PlayerToken);
+            if (game.IsTurn != test || move.PlayerToken == null) {
                 return Unauthorized("This is not your turn");
+            }
+
+            if (game.Pass()) {
+                return Unauthorized("You cannot do a move, opponent gets the next turn");
             }
 
             var doMove = game.DoMove(move.Y, move.X);
@@ -158,6 +163,27 @@ namespace ReversiRestApi.Controllers
             }
 
             iRepository.RemoveGame(game);
+            iRepository.Save();
+
+            return Ok();
+        }
+
+        [HttpPut("result/{token}")]
+        public ActionResult UpdateScores(string token, [FromBody] string playerToken)
+        {
+            var game = iRepository.GetGame(token);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            if (playerToken != game.Player1Token)
+            {
+                return Unauthorized("Invalid player token");
+            }
+
+            game.UpdatedScores = true;
             iRepository.Save();
 
             return Ok();

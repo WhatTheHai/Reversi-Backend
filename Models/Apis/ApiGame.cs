@@ -19,6 +19,7 @@ namespace ReversiRestApi.Models {
         public string Finished { get; set; }
         public string Winner { get; set; }
         public string Loser { get; set; }
+        public string UpdatedScores { get; set; }
 
         public static ApiGame ConvertGameToApiGameData(Game game) {
             return new ApiGame() {
@@ -33,6 +34,7 @@ namespace ReversiRestApi.Models {
                 Finished = game.Finished.ToString(),
                 Winner = game.Winner,
                 Loser = game.Loser,
+                UpdatedScores = game.UpdatedScores.ToString(),
             };
         }
     }

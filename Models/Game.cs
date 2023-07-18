@@ -10,32 +10,34 @@ using Newtonsoft.Json;
 using ReversiRestApi.Interfaces;
 using ReversiRestApi.Models.Enums;
 
-namespace ReversiRestApi.Models
-{
+namespace ReversiRestApi.Models {
     public class Game : IGame {
         public int ID { get; set; }
         public string Description { get; set; }
         public string Token { get; set; }
         public string Player1Token { get; set; }
         public string Player2Token { get; set; }
-        [NotMapped]
-        public Colour[,] Board { get; set; }
+        [NotMapped] public Colour[,] Board { get; set; }
 
         [Column("Board")]
         public string BoardString {
             get => ConvertBoardToString(Board);
             set => Board = ConvertStringToBoard(value);
         }
+
         public Colour IsTurn { get; set; }
         private const int BoardSize = 8;
         [NotMapped] public bool Finished { get; private set; }
         [NotMapped] public string Winner { get; private set; }
         [NotMapped] public string Loser { get; private set; }
         public int GetBoardSize => BoardSize;
-        [NotMapped]
-        public GameStatus GameStatus => Player2Token == null ? GameStatus.Awaiting : (GameFinished() ? GameStatus.Finished : GameStatus.Busy);
 
-        //public bool UpdatedScores { get; set; } = false;
+        [NotMapped]
+        public GameStatus GameStatus => Player2Token == null
+            ? GameStatus.Awaiting
+            : (GameFinished() ? GameStatus.Finished : GameStatus.Busy);
+
+        public bool UpdatedScores { get; set; } = false;
 
 
         public Game() {
@@ -45,11 +47,15 @@ namespace ReversiRestApi.Models
         }
 
         public bool Pass() {
-
-            var emptySquares = AllEmptySquares();
-
-            if (emptySquares.Any(emptySquare => PossibleMove(emptySquare[1], emptySquare[0]))) {
-                return false;
+            for (int row = 0; row < GetBoardSize; row++)
+            {
+                for (int col = 0; col < GetBoardSize; col++)
+                {
+                    if (PossibleMove(row, col))
+                    {
+                        return false;
+                    }
+                }
             }
 
             ChangeTurns();
@@ -73,8 +79,7 @@ namespace ReversiRestApi.Models
             return false;
         }
 
-        public Colour WinningColour()
-        {
+        public Colour WinningColour() {
             int blackCount = Board.Cast<Colour>().Count(cell => cell == Colour.Black);
             int whiteCount = Board.Cast<Colour>().Count(cell => cell == Colour.White);
 
@@ -85,75 +90,60 @@ namespace ReversiRestApi.Models
             return Colour.None;
         }
 
+        private bool IsValidMove(int rowMove, int columnMove, out List<int[]> directions) {
+            directions = new List<int[]>();
 
+            var vectors = new List<int> { -1, 0, 1 };
+            foreach (int col in vectors)
+            {
+                foreach (int row in vectors)
+                {
+                    if (col == 0 && row == 0) continue;
 
-        public bool PossibleMove(int rowMove, int columnMove) {
-            if (!InBounds(rowMove, columnMove))
-                return false;
+                    int currentRow = rowMove + row;
+                    int currentColumn = columnMove + col;
 
-            var vectors = new List<int> {-1, 0, 1};
-            foreach (int col in vectors) {
-                foreach (int row in vectors) {
-                    if (col == row && col == 0) continue;
+                    if (!InBounds(currentRow, currentColumn) || Board[currentRow, currentColumn] != OppositeColour(IsTurn))
+                        continue;
 
-                    int currentRow = rowMove;
-                    int currentColumn = columnMove;
-
-                    currentRow += row;
-                    currentColumn += col;
-
-                    if (!InBounds(currentRow, currentColumn)) continue;
-                    if (Board[currentRow, currentColumn] == IsTurn) continue;
-
-                    while (InBounds(currentRow + row, currentColumn + col)) {
+                    bool validDirection = false;
+                    while (InBounds(currentRow + row, currentColumn + col))
+                    {
                         currentRow += row;
                         currentColumn += col;
                         if (Board[currentRow, currentColumn] == Colour.None)
                             break;
                         if (Board[currentRow, currentColumn] == IsTurn)
-                            return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public bool InBounds(int rowMove, int columnMove) {
-            return rowMove >= 0 && rowMove <= GetBoardSize - 1 && columnMove >= 0 && columnMove <= GetBoardSize - 1;
-        }
-
-        public bool DoMove(int rowMove, int columnMove) {
-            if (!InBounds(rowMove, columnMove))
-                return false;
-
-            var directions = new List<int[]>();
-
-            var vectors = new List<int> {-1, 0, 1};
-            foreach (int col in vectors) {
-                foreach (int row in vectors) {
-                    if (col == row && col == 0) continue;
-                    int currentRow = rowMove;
-                    int currentColumn = columnMove;
-                    currentRow += row;
-                    currentColumn += col;
-                    if (!InBounds(currentRow, currentColumn)) continue;
-                    if (Board[currentRow, currentColumn] == IsTurn) continue;
-
-                    while (InBounds(currentRow + row, currentColumn + col)) {
-                        currentRow += row;
-                        currentColumn += col;
-                        if (Board[currentRow, currentColumn] == Colour.None)
-                            break;
-                        if (Board[currentRow, currentColumn] == IsTurn) {
-                            directions.Add(new int[] {row, col});
+                        {
+                            validDirection = true;
                             break;
                         }
                     }
+
+                    if (validDirection)
+                    {
+                        directions.Add(new int[] { row, col });
+                    }
                 }
             }
 
-            if (directions.Any()) {
+            return directions.Count > 0;
+        }
+
+        public bool PossibleMove(int rowMove, int columnMove) {
+            if (!InBounds(rowMove, columnMove) || Board[rowMove, columnMove] != Colour.None)
+                return false;
+
+            List<int[]> directions;
+            return IsValidMove(rowMove, columnMove, out directions);
+        }
+
+        public bool DoMove(int rowMove, int columnMove) {
+            if (!InBounds(rowMove, columnMove) || Board[rowMove, columnMove] != Colour.None)
+                return false;
+
+            List<int[]> directions;
+            if (IsValidMove(rowMove, columnMove, out directions)) {
                 Board[rowMove, columnMove] = IsTurn;
                 ProcessMoves(rowMove, columnMove, directions);
                 ChangeTurns();
@@ -161,6 +151,11 @@ namespace ReversiRestApi.Models
             }
 
             return false;
+        }
+
+
+        public bool InBounds(int rowMove, int columnMove) {
+            return rowMove >= 0 && rowMove < GetBoardSize && columnMove >= 0 && columnMove < GetBoardSize;
         }
 
         public void ProcessMoves(int rowMove, int columnMove, List<int[]> directions) {
@@ -190,7 +185,6 @@ namespace ReversiRestApi.Models
                     if ((row == halfSz - 1 && col == halfSz) || (row == halfSz && col == halfSz - 1)) {
                         Board[row, col] = Colour.Black;
                     }
-
                 }
             }
         }
@@ -216,7 +210,7 @@ namespace ReversiRestApi.Models
             for (int i = 0; i < GetBoardSize; i++) {
                 for (int j = 0; j < GetBoardSize; j++) {
                     if (Board[i, j] == Colour.None)
-                        emptySquares.Add(new[] {i, j});
+                        emptySquares.Add(new[] { i, j });
                 }
             }
 

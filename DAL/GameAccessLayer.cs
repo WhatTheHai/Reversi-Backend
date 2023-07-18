@@ -23,7 +23,11 @@ namespace ReversiRestApi.DAL
         }
 
         public Game GetGame(string gameToken) {
-            return _context.Games.FirstOrDefault(g => g.Token == gameToken);
+            Game game = _context.Games.FirstOrDefault(g => g.Token == gameToken);
+            if (game != null) {
+                game.GameFinished();
+            }
+            return game;
         }
 
         public void RemoveGame(Game game) {
