@@ -142,6 +142,12 @@ namespace ReversiRestApi.Controllers
                 iRepository.Save();
                 return true;
             }
+            
+            if (game.Player1Token == null) {
+                game.Player1Token = joinGame.PlayerToken;
+                iRepository.Save();
+                return true;
+            }
             return false;
         }
 
@@ -157,7 +163,7 @@ namespace ReversiRestApi.Controllers
             }
 
             // Check if the player1token matches the player1token of the game
-            if (game.Player1Token != removeGame.PlayerToken)
+            if (game.Player1Token != removeGame.PlayerToken && game.UpdatedScores == false)
             {
                 return Unauthorized("You are not the host of the game, you can't delete.");
             }
