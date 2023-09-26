@@ -31,8 +31,7 @@ namespace ReversiRestApi
         {
             services.AddCors(o => o.AddPolicy("Reversi", builder =>
             {
-                builder.WithOrigins("http://localhost:5002")
-                    .SetIsOriginAllowed((host) => true)
+                builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
