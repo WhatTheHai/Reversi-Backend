@@ -242,12 +242,12 @@ namespace ReversiRestApi.Models {
         public void DetermineWinnerAndLoser(Colour WinningColour) {
             switch (WinningColour) {
                 case Colour.Black:
-                    Winner = Player1Token;
-                    Loser = Player2Token;
-                    break;
-                case Colour.White:
                     Winner = Player2Token;
                     Loser = Player1Token;
+                    break;
+                case Colour.White:
+                    Winner = Player1Token;
+                    Loser = Player2Token;
                     break;
                 case Colour.None:
                     Winner = "Draw";
